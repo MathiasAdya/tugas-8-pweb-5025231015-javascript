@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pencarian Kode Pos</title>
+</head>
+<body>
+    <h1>Pencarian Kode Pos</h1>
+    <label for="provinsi">Provinsi</label>
+    <select id="provinsi" onchange="loadKota()">
+        <option value="">Pilih Provinsi</option>
+        <option value="Jawa Timur">Jawa Timur</option>
+        <option value="DKI Jakarta">DKI Jakarta</option>
+    </select>
+
+    <label for="kota">Kabupaten/Kota</label>
+    <select id="kota" onchange="loadKecamatan()">
+        <option value="">Pilih Kota</option>
+    </select>
+
+    <label for="kecamatan">Kecamatan</label>
+    <select id="kecamatan">
+        <option value="">Pilih Kecamatan</option>
+    </select>
+
+    <button onclick="cariKodePos()">Cari Kode Pos</button>
+    <p id="hasilKodePos"></p>
+
+    <script>
+        const dataKodePos = {
+            "Jawa Timur": {
+                "Surabaya": { "Genteng": "60275", "Tegalsari": "60264" },
+                "Malang": { "Klojen": "65111", "Blimbing": "65126" }
+            },
+            "DKI Jakarta": {
+                "Jakarta Selatan": { "Cilandak": "12430", "Pasar Minggu": "12520" },
+                "Jakarta Timur": { "Matraman": "13150", "Jatinegara": "13310" }
+            }
+        };
+
+        function loadKota() {
+            const provinsi = document.getElementById("provinsi").value;
+            const kotaSelect = document.getElementById("kota");
+            kotaSelect.innerHTML = '<option value="">Pilih Kota</option>';
+            if (provinsi && dataKodePos[provinsi]) {
+                Object.keys(dataKodePos[provinsi]).forEach(kota => {
+                    kotaSelect.innerHTML += `<option value="${kota}">${kota}</option>`;
+                });
+            }
+        }
+
+        function loadKecamatan() {
+            const provinsi = document.getElementById("provinsi").value;
+            const kota = document.getElementById("kota").value;
+            const kecamatanSelect = document.getElementById("kecamatan");
+            kecamatanSelect.innerHTML = '<option value="">Pilih Kecamatan</option>';
+            if (provinsi && kota && dataKodePos[provinsi][kota]) {
+                Object.keys(dataKodePos[provinsi][kota]).forEach(kecamatan => {
+                    kecamatanSelect.innerHTML += `<option value="${kecamatan}">${kecamatan}</option>`;
+                });
+            }
+        }
+
+        function cariKodePos() {
+            const provinsi = document.getElementById("provinsi").value;
+            const kota = document.getElementById("kota").value;
+            const kecamatan = document.getElementById("kecamatan").value;
+            if (provinsi && kota && kecamatan) {
+                const kodePos = dataKodePos[provinsi][kota][kecamatan];
+                document.getElementById("hasilKodePos").textContent = 
+                    `Kode Pos: ${kodePos} - ${kecamatan}, ${kota}, ${provinsi}`;
+            } else {
+                document.getElementById("hasilKodePos").textContent = "Silakan lengkapi pilihan!";
+            }
+        }
+    </script>
+</body>
+</html>

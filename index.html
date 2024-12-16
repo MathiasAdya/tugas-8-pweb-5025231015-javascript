@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Registrasi</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input, select, button { margin-bottom: 10px; width: 100%; padding: 8px; }
+        .suggestions { border: 1px solid #ddd; max-height: 150px; overflow-y: auto; display: none; }
+        .suggestions div { padding: 5px; cursor: pointer; }
+        .suggestions div:hover { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>Form Registrasi</h1>
+    <form id="registrationForm">
+        <label for="nama">Nama Mahasiswa</label>
+        <input type="text" id="nama" autocomplete="off" placeholder="Ketik nama...">
+        <div id="namaSuggestions" class="suggestions"></div>
+
+        <label for="nim">NIM</label>
+        <input type="text" id="nim" placeholder="Masukkan NIM">
+
+        <label for="mataKuliah">Mata Kuliah</label>
+        <input type="text" id="mataKuliah" placeholder="Masukkan Mata Kuliah">
+
+        <label for="dosen">Dosen</label>
+        <input type="text" id="dosen" placeholder="Masukkan Nama Dosen">
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        const mahasiswaList = [
+            "Mathias Adya Diwangkara Suganda",
+            "Kadek Fajar",
+            "Azka Rizqullah Ramdhani",
+            "Rafi Putra Hariyawan",
+            "Ari Wijaya",
+            "Amelia Putri"
+        ];
+
+        const inputNama = document.getElementById("nama");
+        const suggestionsBox = document.getElementById("namaSuggestions");
+
+        inputNama.addEventListener("input", function() {
+            const input = this.value.toLowerCase();
+            suggestionsBox.innerHTML = "";
+            if (input === "") {
+                suggestionsBox.style.display = "none";
+                return;
+            }
+
+            const filtered = mahasiswaList.filter(name => name.toLowerCase().includes(input));
+            if (filtered.length > 0) {
+                suggestionsBox.style.display = "block";
+                filtered.forEach(name => {
+                    const suggestion = document.createElement("div");
+                    suggestion.textContent = name;
+                    suggestion.addEventListener("click", () => {
+                        inputNama.value = name;
+                        suggestionsBox.style.display = "none";
+                    });
+                    suggestionsBox.appendChild(suggestion);
+                });
+            } else {
+                suggestionsBox.style.display = "none";
+            }
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!e.target.closest("#nama") && !e.target.closest("#namaSuggestions")) {
+                suggestionsBox.style.display = "none";
+            }
+        });
+    </script>
+    <a href="kodepos.html">
+        <button>Menuju Pencarian Kode Pos</button>
+    </a>
+</body>
+</html>
